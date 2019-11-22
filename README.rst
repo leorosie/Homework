@@ -20,6 +20,6 @@ Message Board Instructions
 
    .. code-block:: bash
 
-   $ python main.py
+      $ python main.py
 
 4. Open up your web browser of choice and go the URL: http://127.0.0.1:5000/

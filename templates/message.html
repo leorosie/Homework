@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <title>Message Board</title>
+  </head>
+  <style>
+  div {
+    word-wrap; break-word;
+    width: 400px;
+    margin: auto;
+  }
+  h1 {
+    margin: auto;
+    width: 400px; 
+  }
+  form {
+    margin: auto;
+    width: 400px; 
+  }
+  h2 {
+    margin: auto;
+    width: 400px;
+  }
+  </style>
+  <body>
+    
+    <h1> Public Message Board </h1>
+
+    <form action="" method="POST">
+      <textarea class="message" placeholder="Messages" cols="30" rows="10"></textarea><br>
+      <input type="submit"/>
+    </form>
+    
+    <br>
+    <br>
+    <h2> Messages </h2>   
+    <div class="message_holder">
+     {% for msg in messages %}
+      <b>{{msg.time}}</b><br>
+      {{msg.message}}<br><br>  
+  
+    {% endfor %}</div>
+    
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+    <script type="text/javascript">
+      var socket = io.connect('http://' + document.domain + ':' + location.port);
+      socket.on( 'connect', function() {
+  
+        var form = $( 'form' ).on( 'submit', function( e ) {
+          e.preventDefault()
+          var now = new Date();
+          var date = [now.getMonth()+1,now.getDate(),now.getFullYear()];
+          var time = [now.getHours(),now.getMinutes(),now.getSeconds()];
+          let time_of_post = date.join("/")+" "+time.join(":")
+          let user_input = $( 'textarea.message' ).val()
+          socket.emit( 'my event', {
+            time_of_post : time_of_post,
+            message : user_input
+          } )
+          $( 'textarea.message' ).val( '' ).focus()
+        } )
+      } )
+      socket.on( 'my response', function( msg ) {
+        console.log( msg)
+        if( typeof msg.time_of_post !== 'undefined' ) {
+
+           $( 'div.message_holder' ).prepend( '<div><br></div>' )
+           $( 'div.message_holder' ).prepend( '<div>'+msg.message+'</div>' )
+           $( 'div.message_holder' ).prepend( '<div><b style="color: #000">'+msg.time_of_post+'</b></div>' )
+           
+        }
+      })
+    </script>
+
+  </body>
+  </html>
+
+
+  
