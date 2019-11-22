@@ -6,8 +6,8 @@ Message Board Instructions
    .. code-block:: bash
 
       $ pip install flask
-      $ pip install flask_socketio
-      $ pip install flask_sqlalchemy
+      $ pip install flask-socketio
+      $ pip install flask-sqlalchemy
 
 2. Create database by importing database object from an interactive Python Shell
 
